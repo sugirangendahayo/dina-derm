@@ -1,0 +1,101 @@
+{
+  "categories": ["Moisturizers", "Cleansers", "Serums", "Sunscreens"],
+  "products": [
+    {
+      "id": 1,
+      "category": "Moisturizers",
+      "name": "Hydrating Face Cream",
+      "price": 25.99,
+      "description": "Deeply hydrates and nourishes the skin for a radiant glow.",
+      "image": "https://m.media-amazon.com/images/I/61iZMQSBiYL._UF1000,1000_QL80_.jpg"
+    },
+    {
+      "id": 2,
+      "category": "Moisturizers",
+      "name": "Nourishing Body Lotion",
+      "price": 19.99,
+      "description": "Enriched with natural oils to soften and smooth body skin.",
+      "image": "https://m.media-amazon.com/images/I/71+XpJP1lGL._UF1000,1000_QL80_.jpg"
+    },
+    {
+      "id": 3,
+      "category": "Moisturizers",
+      "name": "Intensive Repair Balm",
+      "price": 29.99,
+      "description": "Repairs dry, cracked skin with intensive moisture therapy.",
+      "image": "https://katiecouric.com/wp-content/uploads/2024/09/The-Correct-Order-to-Apply-Skincare-Products-scaled.jpg"
+    },
+    {
+      "id": 4,
+      "category": "Cleansers",
+      "name": "Gentle Foaming Cleanser",
+      "price": 15.99,
+      "description": "Gently cleanses without stripping natural oils.",
+      "image": "https://i5.walmartimages.com/seo/Vibriance-Premium-Skincare-Bundle-Super-C-All-in-One-Serum-Moisturizing-Cleanser-Moisturizing-Cream-Sheer-Zinc-Sunscreen-Age-Defying-Serum-Heal-Hydra_47d09aba-7bdc-4994-98a7-53868e000136.036cdf0204e948aeb8e63d93d37c7c6c.jpeg"
+    },
+    {
+      "id": 5,
+      "category": "Cleansers",
+      "name": "Micellar Water",
+      "price": 12.99,
+      "description": "Removes makeup and impurities in one swipe.",
+      "image": "https://www.dermspecpa.com/wp-content/uploads/2021/01/Skin-Ceutical-Carousel.png"
+    },
+    {
+      "id": 6,
+      "category": "Cleansers",
+      "name": "Oil-Based Makeup Remover",
+      "price": 18.99,
+      "description": "Dissolves waterproof makeup while hydrating skin.",
+      "image": "https://cdn.thewirecutter.com/wp-content/media/2024/12/ROUNDUP-KOREAN-SKINCARE-2048px-9736-2x1-1.jpg?width=2048&quality=75&crop=2:1&auto=webp"
+    },
+    {
+      "id": 7,
+      "category": "Serums",
+      "name": "Vitamin C Serum",
+      "price": 24.99,
+      "description": "Brightens skin and reduces dark spots.",
+      "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_social_share_1200x630_center,f_auto,q_auto:best/rockcms/2025-06/250616-beauty-awards-skincare-vl-main-7d37be.jpg"
+    },
+    {
+      "id": 8,
+      "category": "Serums",
+      "name": "Hyaluronic Acid Serum",
+      "price": 22.99,
+      "description": "Provides intense hydration and plumps the skin.",
+      "image": "https://www.skincare.com/-/media/project/loreal/brand-sites/sdc/americas/us/articles/2023/march/01-ed-picks/march-editors-picks-hero-sdc-030123.jpg?cx=0.49&cy=0.54&cw=705&ch=529&blr=False&hash=948E75E94D9FC14DFB4A07C6303F52D9"
+    },
+    {
+      "id": 9,
+      "category": "Serums",
+      "name": "Retinol Serum",
+      "price": 28.99,
+      "description": "Reduces fine lines and improves skin texture.",
+      "image": "http://kbeautyworld.com/cdn/shop/files/Beauty-Of-Joseon-Discovery-Skin-Care-Set-K-Beauty-World.webp?v=1740505656&width=2048"
+    },
+    {
+      "id": 10,
+      "category": "Sunscreens",
+      "name": "Daily SPF 50 Lotion",
+      "price": 20.99,
+      "description": "Broad-spectrum protection for daily use.",
+      "image": "https://www.biossance.com/images?url=https://static.thcdn.com/productimg/original/15148886-4525134863555660.jpg&format=webp&auto=avif&width=1200&height=1200&fit=cover"
+    },
+    {
+      "id": 11,
+      "category": "Sunscreens",
+      "name": "Tinted Mineral Sunscreen",
+      "price": 23.99,
+      "description": "Provides sun protection with a natural tint.",
+      "image": "https://www.gosupps.com/media/catalog/product/7/1/71d1Ia8MWEL.jpg"
+    },
+    {
+      "id": 12,
+      "category": "Sunscreens",
+      "name": "Waterproof Sunblock",
+      "price": 21.99,
+      "description": "Water-resistant formula for active lifestyles.",
+      "image": "https://m.media-amazon.com/images/I/61MYiAwJVQL._UF1000,1000_QL80_.jpg"
+    }
+  ]
+}

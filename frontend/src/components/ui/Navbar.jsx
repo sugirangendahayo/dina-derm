@@ -38,8 +38,8 @@ const Navbar = () => {
             <a href="#about" className="text-white hover:text-gray-300">
               About
             </a>
-            <a href="#services" className="text-white hover:text-gray-300">
-              Services
+            <a href="/collection" className="text-white hover:text-gray-300">
+              Collection
             </a>
             <a href="#contact" className="text-white hover:text-gray-300">
               Contact
