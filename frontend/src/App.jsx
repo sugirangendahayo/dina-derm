@@ -19,6 +19,7 @@ import UserManagement from "@pages/auth/components/UserManagement";
 import Profile from "@pages/Profile";
 import AdminRoute from "@components/AdminRoute";
 import Dashboard from "@pages/auth/components/Dashboard";
+import ProductDetails from "@components/ProductDetails";
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<Dashboard />} />

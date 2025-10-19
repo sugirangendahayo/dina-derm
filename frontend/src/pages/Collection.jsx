@@ -1,5 +1,7 @@
+// frontend/src/pages/Collection.js
 import React, { useState, useEffect } from "react";
 import productsData from "@/data/products.json"; // Direct import
+import { Link } from "react-router-dom";
 
 const Collection = () => {
   const [data, setData] = useState({ categories: [], products: [] });
@@ -179,38 +181,39 @@ const Collection = () => {
         <div className={gridClass}>
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="backdrop-blur-md m-2 bg-white/10 border border-white/20  py-2  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-48 object-cover"
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300x200?text=Image+Not+Found";
-                  }}
-                />
-                <div className="p-4 text-white">
-                  <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
-                  <p className="text-gray-300 mb-2">
-                    ${product.price.toFixed(2)}
-                  </p>
-                  <p className="text-sm text-gray-300 mb-4 line-clamp-2">
-                    {product.description}
-                  </p>
-                  <button className="w-full border-[1px] border-red-500 text-white py-2 rounded hover:bg-red-500 transition-colors flex items-center   justify-center gap-2 cursor-pointer">
-                    Add to Cart
-                    <lord-icon
-                      src="src/data/cart-jump.json"
-                      trigger="loop"
-                      colors="primary:#fff,secondary:#C41E3A "
-                      style={{ width: "24px", height: "24px" }}
-                    />
-                  </button>
+              <Link to={`/product/${product.id}`} key={product.id}>
+                <div className="backdrop-blur-md m-2 bg-white/10 border border-white/20  py-2  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                  <img
+                    src={product.default_image}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/300x200?text=Image+Not+Found";
+                    }}
+                  />
+                  <div className="p-4 text-white">
+                    <h3 className="text-lg font-semibold mb-2">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-300 mb-2">
+                      ${product.price ? product.price.toFixed(2) : "N/A"}
+                    </p>
+                    <p className="text-sm text-gray-300 mb-4 line-clamp-2">
+                      {product.description}
+                    </p>
+                    <button className="w-full border-[1px] border-red-500 text-white py-2 rounded hover:bg-red-500 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                      Add to Cart
+                      <lord-icon
+                        src="src/data/cart-jump.json"
+                        trigger="loop"
+                        colors="primary:#fff,secondary:#C41E3A "
+                        style={{ width: "24px", height: "24px" }}
+                      />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="col-span-full text-center py-8">

@@ -97,7 +97,7 @@ const ProductManagement = () => {
     <div className="text-white">
       <h2 className="text-2xl font-bold mb-4">Manage Products</h2>
       <button
-        className="btn btn-primary mb-4"
+        className="btn bg-red-500 mb-4"
         onClick={() => setShowCreateModal(true)}
       >
         Add Product
@@ -142,28 +142,28 @@ const ProductManagement = () => {
 
       {/* Create Modal - Using DaisyUI */}
       <dialog id="create_modal" className="modal" open={showCreateModal}>
-        <div className="modal-box">
+        <div className="modal-box backdrop-blur-md m-2 bg-white/10 border border-white/20 shadow-lg rounded-lg py-2 z-40 overflow-y-auto transition-all duration-300 ease-in-out  ">
           <h3 className="font-bold text-lg">Create Product</h3>
           <div className="py-4">
             <input
               type="text"
               name="name"
               placeholder="Name"
-              className="input input-bordered w-full mb-2"
+              className="input input-bordered w-full mb-2 text-black"
               onChange={handleInputChange}
             />
             <input
               type="text"
               name="category_id"
               placeholder="Category ID"
-              className="input input-bordered w-full mb-2"
+              className="input input-bordered w-full mb-2 text-black"
               onChange={handleInputChange}
             />
             <input
               type="text"
               name="default_image"
               placeholder="Default Image URL"
-              className="input input-bordered w-full mb-2"
+              className="input input-bordered w-full mb-2 text-black"
               onChange={handleInputChange}
             />
           </div>
@@ -180,7 +180,7 @@ const ProductManagement = () => {
 
       {/* Edit Modal */}
       <dialog id="edit_modal" className="modal" open={showEditModal}>
-        <div className="modal-box">
+        <div className="modal-box backdrop-blur-md m-2 bg-white/10 border border-white/20 shadow-lg rounded-lg py-2 z-40 overflow-y-auto transition-all duration-300 ease-in-out">
           <h3 className="font-bold text-lg">Edit Product</h3>
           <div className="py-4">
             <input
@@ -188,7 +188,7 @@ const ProductManagement = () => {
               name="name"
               value={formData.name}
               placeholder="Name"
-              className="input input-bordered w-full mb-2"
+              className="input input-bordered w-full mb-2 text-black"
               onChange={handleInputChange}
             />
             <input
@@ -204,7 +204,7 @@ const ProductManagement = () => {
               name="default_image"
               value={formData.default_image}
               placeholder="Default Image URL"
-              className="input input-bordered w-full mb-2"
+              className="input input-bordered w-full mb-2 text-black"
               onChange={handleInputChange}
             />
           </div>
