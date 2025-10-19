@@ -12,6 +12,17 @@ const AdminDashboard = () => {
         <ul>
           <li>
             <Link
+              to="dashboard"
+              onClick={() => setActiveTab("dashboard")}
+              className={`block py-2 px-4 rounded ${
+                activeTab === "dashboard" ? "bg-blue-100" : ""
+              }`}
+            >
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link
               to="products"
               onClick={() => setActiveTab("products")}
               className={`block py-2 px-4 rounded ${

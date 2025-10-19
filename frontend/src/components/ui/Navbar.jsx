@@ -1,5 +1,6 @@
+// frontend/src/components/Navbar.js
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "@/context/AuthContext ";
+import { AuthContext } from "@context/AuthContext";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -15,6 +16,8 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const userName = user ? `${user.first_name} ${user.last_name}` : "";
 
   return (
     <nav
@@ -52,9 +55,12 @@ const Navbar = () => {
           {/* Desktop Buttons */}
           {user ? (
             <div className="hidden md:flex items-center space-x-4">
-              <button className="px-4 py-2 text-white border border-white rounded hover:bg-white/10">
-                {user.email}
-              </button>
+              <Link
+                to="/profile"
+                className="px-4 py-2 text-white border border-white rounded hover:bg-white/10"
+              >
+                {userName}
+              </Link>
               <button
                 onClick={logout}
                 className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200"
@@ -120,20 +126,23 @@ const Navbar = () => {
               About
             </a>
             <a
-              href="#services"
+              href="/collection"
               className="block text-white hover:text-gray-300"
             >
-              Services
+              Collection
             </a>
             <a href="#contact" className="block text-white hover:text-gray-300">
               Contact
             </a>
 
             {user ? (
-              <div className="hidden md:flex items-center space-x-4">
-                <button className="px-4 py-2 text-white border border-white rounded hover:bg-white/10">
-                  {user.email}
-                </button>
+              <div className="flex flex-col space-y-2">
+                <Link
+                  to="/profile"
+                  className="px-4 py-2 text-white border border-white rounded hover:bg-white/10"
+                >
+                  {userName}
+                </Link>
                 <button
                   onClick={logout}
                   className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200"
@@ -142,7 +151,7 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <div className="hidden md:flex items-center space-x-4">
+              <div className="flex flex-col space-y-2">
                 <Link
                   to="/login"
                   className="px-4 py-2 text-white border border-white rounded hover:bg-white/10"

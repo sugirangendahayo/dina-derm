@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+// frontend/src/context/AuthContext.js
+import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
-// Create the context
-const AuthContext = React.createContext(null);
+// eslint-disable-next-line react-refresh/only-export-components
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -11,10 +13,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // Verify token or fetch user info
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      // Fetch user details if needed
-      setUser({ token }); // Placeholder; fetch role etc.
+      const decoded = jwtDecode(token);
+      setUser(decoded);
     }
     setLoading(false);
   }, []);
@@ -23,12 +24,19 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.post("/api/auth/login", { email, password });
     localStorage.setItem("token", res.data.token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
-    setUser({ token: res.data.token });
+    const decoded = jwtDecode(res.data.token);
+    setUser(decoded);
+    return decoded; // Return for redirect
   };
 
-  const signup = async (email, password) => {
-    await axios.post("/api/auth/signup", { email, password });
-    // Auto-login after signup if desired
+  const signup = async (firstName, lastName, email, phone, password) => {
+    await axios.post("/api/auth/signup", {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      phone,
+      password,
+    });
   };
 
   const logout = () => {
@@ -43,5 +51,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export { AuthContext };
