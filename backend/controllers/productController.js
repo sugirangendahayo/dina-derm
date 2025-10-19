@@ -54,4 +54,47 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-// Add update/delete as needed...
+exports.updateProduct = async (req, res) => {
+    const { id } = req.params;
+    const { name, category_id, default_image } = req.body;
+    try {
+      await pool.query('UPDATE Products SET name = ?, category_id = ?, default_image = ? WHERE id = ?', [name, category_id, default_image, id]);
+      res.json({ message: 'Product updated' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  
+  exports.deleteProduct = async (req, res) => {
+    const { id } = req.params;
+    try {
+      await pool.query('DELETE FROM Products WHERE id = ?', [id]);
+      await ProductVariant.deleteMany({ product_id: parseInt(id) });
+      res.json({ message: 'Product and variants deleted' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  
+  exports.updateVariant = async (req, res) => {
+    const { id } = req.params;
+    const { variant_name, price, stock, attributes, images } = req.body;
+    try {
+      const variant = await ProductVariant.findByIdAndUpdate(id, { variant_name, price, stock, attributes, images }, { new: true });
+      if (!variant) return res.status(404).json({ message: 'Variant not found' });
+      res.json(variant);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  
+  exports.deleteVariant = async (req, res) => {
+    const { id } = req.params;
+    try {
+      await ProductVariant.findByIdAndDelete(id);
+      res.json({ message: 'Variant deleted' });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  

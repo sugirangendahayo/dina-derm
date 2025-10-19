@@ -42,3 +42,13 @@ exports.getOrders = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+exports.deleteOrder = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query("DELETE FROM Order_Items WHERE order_id = ?", [id]);
+    await pool.query("DELETE FROM Orders WHERE id = ?", [id]);
+    res.json({ message: "Order deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

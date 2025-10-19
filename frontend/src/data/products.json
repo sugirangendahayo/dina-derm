@@ -27,6 +27,63 @@
     },
     {
       "id": 4,
+      "category": "Moisturizers",
+      "name": "Shea Butter Glow Cream",
+      "price": 21.5,
+      "description": "Made with pure shea butter for a smooth, glowing finish.",
+      "image": "https://cdn.pixabay.com/photo/2017/08/10/03/46/cream-2612951_1280.jpg"
+    },
+    {
+      "id": 5,
+      "category": "Moisturizers",
+      "name": "Aloe Vera Hydration Gel",
+      "price": 17.99,
+      "description": "Soothes and cools dry, irritated skin instantly.",
+      "image": "https://cdn.pixabay.com/photo/2017/03/10/17/31/aloe-vera-2131542_1280.jpg"
+    },
+    {
+      "id": 6,
+      "category": "Moisturizers",
+      "name": "Night Recovery Moisturizer",
+      "price": 27.49,
+      "description": "Replenishes skin moisture while you sleep.",
+      "image": "https://cdn.pixabay.com/photo/2016/11/29/09/15/cosmetics-1867839_1280.jpg"
+    },
+    {
+      "id": 7,
+      "category": "Moisturizers",
+      "name": "Vitamin E Daily Lotion",
+      "price": 22.0,
+      "description": "Rich in vitamin E for protection against dryness.",
+      "image": "https://cdn.pixabay.com/photo/2017/07/31/22/06/cosmetic-2559800_1280.jpg"
+    },
+    {
+      "id": 8,
+      "category": "Moisturizers",
+      "name": "Collagen Lift Cream",
+      "price": 30.5,
+      "description": "Boosts elasticity and reduces fine lines.",
+      "image": "https://cdn.pixabay.com/photo/2018/03/28/20/07/cream-3266408_1280.jpg"
+    },
+    {
+      "id": 9,
+      "category": "Moisturizers",
+      "name": "Hydra Boost Lotion",
+      "price": 23.99,
+      "description": "Instantly hydrates and keeps skin soft all day.",
+      "image": "https://cdn.pixabay.com/photo/2015/10/06/19/17/cream-976766_1280.jpg"
+    },
+    {
+      "id": 10,
+      "category": "Moisturizers",
+      "name": "Coconut Milk Moisturizer",
+      "price": 20.49,
+      "description": "Made with coconut milk to smooth rough skin.",
+      "image": "https://cdn.pixabay.com/photo/2017/08/01/13/03/coconut-2562366_1280.jpg"
+    },
+
+    {
+      "id": 11,
       "category": "Cleansers",
       "name": "Gentle Foaming Cleanser",
       "price": 15.99,
@@ -34,7 +91,7 @@
       "image": "https://i5.walmartimages.com/seo/Vibriance-Premium-Skincare-Bundle-Super-C-All-in-One-Serum-Moisturizing-Cleanser-Moisturizing-Cream-Sheer-Zinc-Sunscreen-Age-Defying-Serum-Heal-Hydra_47d09aba-7bdc-4994-98a7-53868e000136.036cdf0204e948aeb8e63d93d37c7c6c.jpeg"
     },
     {
-      "id": 5,
+      "id": 12,
       "category": "Cleansers",
       "name": "Micellar Water",
       "price": 12.99,
@@ -42,7 +99,7 @@
       "image": "https://www.dermspecpa.com/wp-content/uploads/2021/01/Skin-Ceutical-Carousel.png"
     },
     {
-      "id": 6,
+      "id": 13,
       "category": "Cleansers",
       "name": "Oil-Based Makeup Remover",
       "price": 18.99,
@@ -50,7 +107,64 @@
       "image": "https://cdn.thewirecutter.com/wp-content/media/2024/12/ROUNDUP-KOREAN-SKINCARE-2048px-9736-2x1-1.jpg?width=2048&quality=75&crop=2:1&auto=webp"
     },
     {
-      "id": 7,
+      "id": 14,
+      "category": "Cleansers",
+      "name": "Charcoal Detox Wash",
+      "price": 16.49,
+      "description": "Draws out impurities and unclogs pores.",
+      "image": "https://cdn.pixabay.com/photo/2017/04/10/22/24/charcoal-2220144_1280.jpg"
+    },
+    {
+      "id": 15,
+      "category": "Cleansers",
+      "name": "Green Tea Facial Wash",
+      "price": 17.99,
+      "description": "Infused with green tea for a refreshing clean.",
+      "image": "https://cdn.pixabay.com/photo/2017/07/13/20/13/tea-2504984_1280.jpg"
+    },
+    {
+      "id": 16,
+      "category": "Cleansers",
+      "name": "Exfoliating Gel Cleanser",
+      "price": 19.49,
+      "description": "Gently exfoliates dead skin cells for a smooth feel.",
+      "image": "https://cdn.pixabay.com/photo/2018/01/23/12/31/scrub-3100177_1280.jpg"
+    },
+    {
+      "id": 17,
+      "category": "Cleansers",
+      "name": "Aloe Gentle Cleanser",
+      "price": 15.5,
+      "description": "Calms and cleanses sensitive skin types.",
+      "image": "https://cdn.pixabay.com/photo/2016/11/19/17/38/aloe-1830197_1280.jpg"
+    },
+    {
+      "id": 18,
+      "category": "Cleansers",
+      "name": "Vitamin C Foam Wash",
+      "price": 18.49,
+      "description": "Energizes dull skin with a citrus burst.",
+      "image": "https://cdn.pixabay.com/photo/2016/07/08/16/37/orange-1500464_1280.jpg"
+    },
+    {
+      "id": 19,
+      "category": "Cleansers",
+      "name": "Rose Water Cleanser",
+      "price": 14.99,
+      "description": "Refreshes and tones the skin naturally.",
+      "image": "https://cdn.pixabay.com/photo/2017/05/07/08/56/rose-2298455_1280.jpg"
+    },
+    {
+      "id": 20,
+      "category": "Cleansers",
+      "name": "Deep Pore Foam Cleanser",
+      "price": 20.99,
+      "description": "Cleanses deep pores and removes excess oil.",
+      "image": "https://cdn.pixabay.com/photo/2016/11/29/13/00/bath-1867373_1280.jpg"
+    },
+
+    {
+      "id": 21,
       "category": "Serums",
       "name": "Vitamin C Serum",
       "price": 24.99,
@@ -58,7 +172,7 @@
       "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_social_share_1200x630_center,f_auto,q_auto:best/rockcms/2025-06/250616-beauty-awards-skincare-vl-main-7d37be.jpg"
     },
     {
-      "id": 8,
+      "id": 22,
       "category": "Serums",
       "name": "Hyaluronic Acid Serum",
       "price": 22.99,
@@ -66,7 +180,7 @@
       "image": "https://www.skincare.com/-/media/project/loreal/brand-sites/sdc/americas/us/articles/2023/march/01-ed-picks/march-editors-picks-hero-sdc-030123.jpg?cx=0.49&cy=0.54&cw=705&ch=529&blr=False&hash=948E75E94D9FC14DFB4A07C6303F52D9"
     },
     {
-      "id": 9,
+      "id": 23,
       "category": "Serums",
       "name": "Retinol Serum",
       "price": 28.99,
@@ -74,7 +188,64 @@
       "image": "http://kbeautyworld.com/cdn/shop/files/Beauty-Of-Joseon-Discovery-Skin-Care-Set-K-Beauty-World.webp?v=1740505656&width=2048"
     },
     {
-      "id": 10,
+      "id": 24,
+      "category": "Serums",
+      "name": "Niacinamide Brightening Serum",
+      "price": 26.49,
+      "description": "Evens skin tone and reduces blemishes.",
+      "image": "https://cdn.pixabay.com/photo/2021/02/26/19/35/skincare-6051574_1280.jpg"
+    },
+    {
+      "id": 25,
+      "category": "Serums",
+      "name": "Collagen Boost Serum",
+      "price": 30.99,
+      "description": "Enhances skin firmness and elasticity.",
+      "image": "https://cdn.pixabay.com/photo/2020/02/06/18/45/serum-4824434_1280.jpg"
+    },
+    {
+      "id": 26,
+      "category": "Serums",
+      "name": "Anti-Aging Repair Serum",
+      "price": 33.5,
+      "description": "Reduces wrinkles and revitalizes dull skin.",
+      "image": "https://cdn.pixabay.com/photo/2017/06/21/22/23/cosmetics-2423653_1280.jpg"
+    },
+    {
+      "id": 27,
+      "category": "Serums",
+      "name": "Acne Control Serum",
+      "price": 19.99,
+      "description": "Targets breakouts and clears pores gently.",
+      "image": "https://cdn.pixabay.com/photo/2018/01/15/10/14/serum-3089938_1280.jpg"
+    },
+    {
+      "id": 28,
+      "category": "Serums",
+      "name": "Glow Booster Serum",
+      "price": 29.99,
+      "description": "Instantly revives tired skin for a radiant glow.",
+      "image": "https://cdn.pixabay.com/photo/2020/04/28/11/34/serum-5102300_1280.jpg"
+    },
+    {
+      "id": 29,
+      "category": "Serums",
+      "name": "Hydra Essence Serum",
+      "price": 27.49,
+      "description": "Lightweight serum for long-lasting moisture.",
+      "image": "https://cdn.pixabay.com/photo/2020/08/19/16/56/serum-5502291_1280.jpg"
+    },
+    {
+      "id": 30,
+      "category": "Serums",
+      "name": "Vitamin B5 Repair Serum",
+      "price": 25.0,
+      "description": "Replenishes skin barrier and soothes irritation.",
+      "image": "https://cdn.pixabay.com/photo/2019/04/17/21/12/skincare-4135583_1280.jpg"
+    },
+
+    {
+      "id": 31,
       "category": "Sunscreens",
       "name": "Daily SPF 50 Lotion",
       "price": 20.99,
@@ -82,7 +253,7 @@
       "image": "https://www.biossance.com/images?url=https://static.thcdn.com/productimg/original/15148886-4525134863555660.jpg&format=webp&auto=avif&width=1200&height=1200&fit=cover"
     },
     {
-      "id": 11,
+      "id": 32,
       "category": "Sunscreens",
       "name": "Tinted Mineral Sunscreen",
       "price": 23.99,
@@ -90,12 +261,68 @@
       "image": "https://www.gosupps.com/media/catalog/product/7/1/71d1Ia8MWEL.jpg"
     },
     {
-      "id": 12,
+      "id": 33,
       "category": "Sunscreens",
       "name": "Waterproof Sunblock",
       "price": 21.99,
       "description": "Water-resistant formula for active lifestyles.",
       "image": "https://m.media-amazon.com/images/I/61MYiAwJVQL._UF1000,1000_QL80_.jpg"
+    },
+    {
+      "id": 34,
+      "category": "Sunscreens",
+      "name": "Aloe After Sun Lotion",
+      "price": 19.99,
+      "description": "Cools and calms sun-exposed skin.",
+      "image": "https://cdn.pixabay.com/photo/2016/07/22/09/59/sun-1537201_1280.jpg"
+    },
+    {
+      "id": 35,
+      "category": "Sunscreens",
+      "name": "Matte Finish SPF 40",
+      "price": 22.5,
+      "description": "Lightweight and non-greasy with matte texture.",
+      "image": "https://cdn.pixabay.com/photo/2016/07/22/09/58/sunscreen-1537196_1280.jpg"
+    },
+    {
+      "id": 36,
+      "category": "Sunscreens",
+      "name": "Kids Safe SPF 60 Lotion",
+      "price": 24.0,
+      "description": "Gentle protection suitable for kids and sensitive skin.",
+      "image": "https://cdn.pixabay.com/photo/2015/03/26/09/43/sun-690969_1280.jpg"
+    },
+    {
+      "id": 37,
+      "category": "Sunscreens",
+      "name": "Sport Sunscreen Spray",
+      "price": 26.49,
+      "description": "Sweat-resistant spray for outdoor activities.",
+      "image": "https://cdn.pixabay.com/photo/2017/05/08/10/21/sunscreen-2298363_1280.jpg"
+    },
+    {
+      "id": 38,
+      "category": "Sunscreens",
+      "name": "UV Shield Cream SPF 45",
+      "price": 23.5,
+      "description": "Protects against UVA and UVB rays effectively.",
+      "image": "https://cdn.pixabay.com/photo/2017/07/19/12/05/sunscreen-2510936_1280.jpg"
+    },
+    {
+      "id": 39,
+      "category": "Sunscreens",
+      "name": "Ultra-Light Gel Sunscreen",
+      "price": 21.0,
+      "description": "Non-sticky gel texture for oily skin types.",
+      "image": "https://cdn.pixabay.com/photo/2016/07/22/09/58/sunscreen-1537197_1280.jpg"
+    },
+    {
+      "id": 40,
+      "category": "Sunscreens",
+      "name": "Coconut Scent SPF 50",
+      "price": 25.5,
+      "description": "Smells great while keeping your skin protected.",
+      "image": "https://cdn.pixabay.com/photo/2015/05/31/13/45/coconut-791779_1280.jpg"
     }
   ]
 }

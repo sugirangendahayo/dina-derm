@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "@/context/AuthContext ";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, logout } = useContext(AuthContext);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,17 +50,36 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <button className="px-4 py-2 text-white border border-white rounded hover:bg-white/10">
-              Login
-            </button>
-            <button className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200">
-              Signup
-            </button>
-          </div>
-
+          {user ? (
+            <div className="hidden md:flex items-center space-x-4">
+              <button className="px-4 py-2 text-white border border-white rounded hover:bg-white/10">
+                {user.email}
+              </button>
+              <button
+                onClick={logout}
+                className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center space-x-4">
+              <Link
+                to="/login"
+                className="px-4 py-2 text-white border border-white rounded hover:bg-white/10"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200"
+              >
+                Signup
+              </Link>
+            </div>
+          )}
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center ">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-white focus:outline-none"
@@ -90,7 +112,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 space-y-4 pb-4">
+          <div className="md:hidden mt-4 space-y-4 pb-4 backdrop-blur-md m-2 bg-white/10 border border-white/20 shadow-lg rounded-lg py-2">
             <a href="#home" className="block text-white hover:text-gray-300">
               Home
             </a>
@@ -106,12 +128,35 @@ const Navbar = () => {
             <a href="#contact" className="block text-white hover:text-gray-300">
               Contact
             </a>
-            <button className="w-full px-4 py-2 text-white border border-white rounded hover:bg-white/10">
-              Login
-            </button>
-            <button className="w-full px-4 py-2 bg-white text-black rounded hover:bg-gray-200">
-              Signup
-            </button>
+
+            {user ? (
+              <div className="hidden md:flex items-center space-x-4">
+                <button className="px-4 py-2 text-white border border-white rounded hover:bg-white/10">
+                  {user.email}
+                </button>
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center space-x-4">
+                <Link
+                  to="/login"
+                  className="px-4 py-2 text-white border border-white rounded hover:bg-white/10"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200"
+                >
+                  Signup
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
