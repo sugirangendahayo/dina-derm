@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const productVariantSchema = new mongoose.Schema({
   product_id: { type: Number, required: true }, // References MySQL product id
@@ -13,4 +13,6 @@ const productVariantSchema = new mongoose.Schema({
   images: [String],
 });
 
-module.exports = mongoose.model("ProductVariant", productVariantSchema);
+const ProductVariant = mongoose.model("ProductVariant", productVariantSchema);
+
+export default ProductVariant;

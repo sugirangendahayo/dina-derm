@@ -1,5 +1,5 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createCategory,
   createProduct,
   createVariant,
@@ -8,8 +8,8 @@ const {
   deleteProduct,
   updateVariant,
   deleteVariant,
-} = require("../../controllers/productController");
-const { authenticate, isAdmin } = require("../../middleware/authMiddleware");
+} from "../controllers/productController.js";
+import { authenticate, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -22,4 +22,4 @@ router.put("/variants/:id", authenticate, isAdmin, updateVariant);
 router.delete("/variants/:id", authenticate, isAdmin, deleteVariant);
 router.get("/", getProducts); // Public
 
-module.exports = router;
+export default router;

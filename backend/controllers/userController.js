@@ -1,7 +1,8 @@
 // backend/controllers/userController.js (New file)
-const pool = require("../config/mysql")();
+import { getPool } from "../config/mysql.js";
+const pool = getPool();
 
-exports.getUsers = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
     const [users] = await pool.query("SELECT id, email, role FROM Users"); // Exclude password
     res.json(users);
@@ -10,7 +11,7 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-exports.updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   const { id } = req.params;
   const { role, bio } = req.body; // Assuming bio is added; add column if needed
   try {
@@ -25,7 +26,7 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
     await pool.query("DELETE FROM Users WHERE id = ?", [id]);

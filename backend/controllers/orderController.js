@@ -1,6 +1,7 @@
-const pool = require("../config/mysql")();
+import { getPool } from "../config/mysql.js";
+const pool = getPool();
 
-exports.createOrder = async (req, res) => {
+export const createOrder = async (req, res) => {
   const { items } = req.body; // items: [{variant_id, quantity, price}]
   const user_id = req.user.id; // From JWT
   let total_amount = 0;
@@ -26,7 +27,7 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.getOrders = async (req, res) => {
+export const getOrders = async (req, res) => {
   const user = req.user;
   try {
     let query = "SELECT * FROM Orders";
@@ -42,7 +43,7 @@ exports.getOrders = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-exports.deleteOrder = async (req, res) => {
+export const deleteOrder = async (req, res) => {
   const { id } = req.params;
   try {
     await pool.query("DELETE FROM Order_Items WHERE order_id = ?", [id]);

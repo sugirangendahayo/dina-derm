@@ -1,5 +1,5 @@
-const mysql = require("mysql2");
-const dotenv = require("dotenv");
+import mysql from "mysql2";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DB,
 });
 
-module.exports = () => {
+export const getConnection = () => {
   pool.getConnection((err, connection) => {
     if (err) {
       console.error("MySQL connection error:", err);
@@ -19,5 +19,8 @@ module.exports = () => {
     console.log("MySQL connected");
     connection.release();
   });
+};
+
+export const getPool = () => {
   return pool.promise(); // Return promise-based pool for async queries
 };

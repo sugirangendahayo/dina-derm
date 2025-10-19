@@ -1,13 +1,13 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const connectMySQL = require("./config/mysql");
-const connectMongo = require("./config/mongo");
-const authRoutes = require("./routes/routes/auth");
-const productRoutes = require("./routes/routes/products");
-const orderRoutes = require("./routes/routes/orders");
-const userRoutes = require("./routes/users");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { getConnection } from "./config/mysql.js";
+import connectMongo from "./config/mongo.js";
+import authRoutes from "./routes/auth.js";
+import productRoutes from "./routes/products.js";
+import orderRoutes from "./routes/orders.js";
+import userRoutes from "./routes/users.js";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Connect databases
-connectMySQL();
+getConnection();
 connectMongo();
 
 app.use("/api/auth", authRoutes);

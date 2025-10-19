@@ -1,8 +1,9 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const pool = require("../config/mysql")(); // Get promise pool
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { getPool } from "../config/mysql.js";
+const pool = getPool();
 
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
   const { email, password } = req.body;
   try {
     // Check if first user
@@ -20,7 +21,7 @@ exports.signup = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const [users] = await pool.query("SELECT * FROM Users WHERE email = ?", [
