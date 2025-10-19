@@ -1,10 +1,12 @@
 // frontend/src/pages/Collection.js
 import React, { useState, useEffect } from "react";
-import productsData from "@/data/products.json"; // Direct import
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Collection = () => {
-  const [data, setData] = useState({ categories: [], products: [] });
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -22,25 +24,69 @@ const Collection = () => {
   }, []);
 
   useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setData(productsData);
-      if (productsData.categories && productsData.categories.length > 0) {
-        setSelectedCategory(productsData.categories[0]);
+      const [categoriesRes, productsRes] = await Promise.all([
+        axios.get("/api/products/categories"),
+        axios.get("/api/products"),
+      ]);
+      const categoryMap = categoriesRes.data.reduce((acc, cat) => {
+        acc[cat.id] = cat.name;
+        return acc;
+      }, {});
+      const processedProducts = productsRes.data.products.map((product) => {
+        // Calculate price safely
+        const productVariants = productsRes.data.variants.filter(
+          (v) => v.product_id === product.id
+        );
+
+        let price;
+        if (productVariants.length > 0) {
+          const variantPrices = productVariants.map(
+            (v) => parseFloat(v.price) || 0
+          );
+          price = Math.min(...variantPrices);
+        } else {
+          price = parseFloat(product.base_price) || 0;
+        }
+
+        // Ensure price is a valid number
+        price = isNaN(price) ? 0 : price;
+
+        return {
+          ...product,
+          category: categoryMap[product.category_id] || "Unknown",
+          variants: productVariants,
+          price: price,
+          additional_images:
+            typeof product.additional_images === "string"
+              ? JSON.parse(product.additional_images)
+              : product.additional_images || [],
+        };
+      });
+      setCategories(Object.values(categoryMap));
+      setProducts(processedProducts);
+      if (Object.values(categoryMap).length > 0) {
+        setSelectedCategory(Object.values(categoryMap)[0]);
       }
-      setLoading(false);
     } catch (err) {
-      console.error("Error loading products:", err);
-      setError("Failed to load products");
+      console.error("Error loading data:", err);
+      setError("Failed to load products and categories");
+      toast.error("Failed to load data");
+    } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   const filteredProducts =
     selectedCategory === "All"
-      ? data.products || []
-      : (data.products || []).filter(
-          (product) => product.category === selectedCategory
-        );
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
 
   if (loading) {
     return (
@@ -154,15 +200,15 @@ const Collection = () => {
           <>
             <h2 className="text-xl font-bold mb-4 text-white">Categories</h2>
             <ul>
-              {(data.categories || []).map((cat) => (
+              {categories.map((cat) => (
                 <li
                   key={cat}
                   onClick={() => {
                     setSelectedCategory(cat);
                     if (!isDesktop) setIsSidebarOpen(false);
                   }}
-                  className={`cursor-pointer py-2 px-4 hover:bg-gray-200 rounded text-white ${
-                    selectedCategory === cat ? "bg-blue-100 font-bold" : ""
+                  className={`cursor-pointer py-2 px-4  rounded text-white ${
+                    selectedCategory === cat ? "bg-red-500 font-bold text-white" : ""
                   }`}
                 >
                   {cat}
@@ -184,7 +230,7 @@ const Collection = () => {
               <Link to={`/product/${product.id}`} key={product.id}>
                 <div className="backdrop-blur-md m-2 bg-white/10 border border-white/20  py-2  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                   <img
-                    src={product.default_image}
+                    src={`http://localhost:5000${product.default_image}`}
                     alt={product.name}
                     className="w-full h-48 object-cover"
                     onError={(e) => {
@@ -197,7 +243,11 @@ const Collection = () => {
                       {product.name}
                     </h3>
                     <p className="text-gray-300 mb-2">
-                      ${product.price ? product.price.toFixed(2) : "N/A"}
+                      {/* Safe price display with fallback */}$
+                      {typeof product.price === "number" &&
+                      !isNaN(product.price)
+                        ? product.price.toFixed(2)
+                        : "0.00"}
                     </p>
                     <p className="text-sm text-gray-300 mb-4 line-clamp-2">
                       {product.description}
