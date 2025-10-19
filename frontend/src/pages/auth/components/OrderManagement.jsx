@@ -51,7 +51,7 @@ const OrderManagement = () => {
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           <thead>
-            <tr>
+            <tr className="text-white">
               <th>ID</th>
               <th>User ID</th>
               <th>Total Amount</th>

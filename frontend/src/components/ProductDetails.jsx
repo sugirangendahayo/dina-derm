@@ -1,15 +1,35 @@
-// frontend/src/pages/ProductDetails.js (New)
-import React, { useState } from "react";
+// frontend/src/pages/ProductDetails.js
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import productsData from "@/data/products.json";
-
 
 const ProductDetails = () => {
   const { id } = useParams();
   const product = productsData.products.find((p) => p.id === parseInt(id));
+
   const [selectedVariant, setSelectedVariant] = useState(
-    product.variants ? product.variants[0] : null
+    product?.variants?.[0] || null
   );
+  const [allImages, setAllImages] = useState([
+    product?.default_image,
+    ...(product?.additional_images || []),
+  ]);
+  const [selectedImage, setSelectedImage] = useState(product?.default_image);
+
+  useEffect(() => {
+    if (!product) return;
+
+    let images = [product.default_image, ...(product.additional_images || [])];
+    if (
+      selectedVariant &&
+      selectedVariant.images &&
+      selectedVariant.images.length > 0
+    ) {
+      images = selectedVariant.images;
+    }
+    setAllImages(images);
+    setSelectedImage(images[0]);
+  }, [selectedVariant, product]);
 
   if (!product) {
     return (
@@ -19,26 +39,34 @@ const ProductDetails = () => {
     );
   }
 
-  const images = [product.default_image, ...(product.additional_images || [])];
   const currentPrice = selectedVariant ? selectedVariant.price : product.price;
-  const currentImages = selectedVariant ? selectedVariant.images : images;
 
   return (
     <div className="min-h-screen bg-black pt-24 p-8 text-white">
-        <div>
-            <Link to="/collection">Back to Collection</Link>
-        </div>
+      <div>
+        <Link to="/collection">Back to Collection</Link>
+      </div>
       <h1 className="text-4xl font-bold mb-6">{product.name}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="grid grid-cols-2 gap-4">
-          {currentImages.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`${product.name} image ${index + 1}`}
-              className="w-full h-64 object-cover rounded-lg"
-            />
-          ))}
+        <div className="flex flex-col">
+          <img
+            src={selectedImage}
+            alt={product.name}
+            className="w-full h-96 object-cover rounded-lg mb-4"
+          />
+          <div className="flex flex-wrap gap-2">
+            {allImages.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`${product.name} thumbnail ${index + 1}`}
+                className={`w-20 h-20 object-cover rounded cursor-pointer ${
+                  img === selectedImage ? "border-2 border-blue-500" : ""
+                }`}
+                onClick={() => setSelectedImage(img)}
+              />
+            ))}
+          </div>
         </div>
         <div>
           <p className="text-2xl font-semibold mb-4">
@@ -68,6 +96,20 @@ const ProductDetails = () => {
                   </option>
                 ))}
               </select>
+              {selectedVariant.attributes && (
+                <div className="mt-4">
+                  <h4 className="text-lg font-semibold">Attributes:</h4>
+                  <ul>
+                    {Object.entries(selectedVariant.attributes).map(
+                      ([key, value]) => (
+                        <li key={key}>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
           <button className="w-full border-[1px] border-red-500 text-white py-3 rounded hover:bg-red-500 transition-colors flex items-center justify-center gap-2">

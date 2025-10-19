@@ -8,10 +8,14 @@ import authRoutes from "./routes/auth.js";
 import productRoutes from "./routes/products.js";
 import orderRoutes from "./routes/orders.js";
 import userRoutes from "./routes/users.js";
+import multer from "multer";
 
 dotenv.config();
 
 const app = express();
+app.use(express.json());
+app.use("/uploads", express.static("uploads"));
+
 app.use(cors());
 app.use(bodyParser.json());
 

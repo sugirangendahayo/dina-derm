@@ -87,7 +87,7 @@ const UserManagement = () => {
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           <thead>
-            <tr>
+            <tr className="text-white">
               <th>ID</th>
               <th>First Name</th>
               <th>Last Name</th>
