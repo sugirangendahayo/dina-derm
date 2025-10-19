@@ -1,10 +1,12 @@
-// backend/controllers/userController.js (New file)
+// backend/controllers/userController.js
 import { getPool } from "../config/mysql.js";
 const pool = getPool();
 
 export const getUsers = async (req, res) => {
   try {
-    const [users] = await pool.query("SELECT id, email, role FROM Users"); // Exclude password
+    const [users] = await pool.query(
+      "SELECT id, first_name, last_name, email, phone, bio, role FROM Users"
+    );
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -13,13 +15,12 @@ export const getUsers = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { role, bio } = req.body; // Assuming bio is added; add column if needed
+  const { first_name, last_name, phone, bio, role } = req.body;
   try {
-    await pool.query("UPDATE Users SET role = ?, bio = ? WHERE id = ?", [
-      role,
-      bio,
-      id,
-    ]);
+    await pool.query(
+      "UPDATE Users SET first_name = ?, last_name = ?, phone = ?, bio = ?, role = ? WHERE id = ?",
+      [first_name, last_name, phone, bio, role, id]
+    );
     res.json({ message: "User updated" });
   } catch (err) {
     res.status(500).json({ error: err.message });

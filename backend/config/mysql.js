@@ -16,7 +16,7 @@ export const getConnection = () => {
       console.error("MySQL connection error:", err);
       return;
     }
-    console.log("MySQL connected");
+    console.log("MySQL connected ✨🧨");
     connection.release();
   });
 };
