@@ -6,8 +6,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
 
   return (
-    <div className="flex min-h-screen bg-gray-100 pt-24">
-      <aside className="w-64 bg-white p-4 shadow-lg">
+    <div className="flex min-h-screen bg-black ">
+      <aside className="w-64 backdrop-blur-md m-2 bg-white/10 border border-white/20 shadow-lg rounded-lg py-2 z-40 overflow-y-auto transition-all duration-300 ease-in-out p-4 text-white">
         <h2 className="text-xl font-bold mb-4">Admin Dashboard</h2>
         <ul>
           <li>
@@ -15,7 +15,7 @@ const AdminDashboard = () => {
               to="dashboard"
               onClick={() => setActiveTab("dashboard")}
               className={`block py-2 px-4 rounded ${
-                activeTab === "dashboard" ? "bg-blue-100" : ""
+                activeTab === "dashboard" ? "bg-red-500 text-white " : ""
               }`}
             >
               Dashboard
@@ -26,7 +26,7 @@ const AdminDashboard = () => {
               to="products"
               onClick={() => setActiveTab("products")}
               className={`block py-2 px-4 rounded ${
-                activeTab === "products" ? "bg-blue-100" : ""
+                activeTab === "products" ? "bg-red-500 text-white " : ""
               }`}
             >
               Products
@@ -37,7 +37,7 @@ const AdminDashboard = () => {
               to="orders"
               onClick={() => setActiveTab("orders")}
               className={`block py-2 px-4 rounded ${
-                activeTab === "orders" ? "bg-blue-100" : ""
+                activeTab === "orders" ? "bg-red-500 text-white " : ""
               }`}
             >
               Orders
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
               to="users"
               onClick={() => setActiveTab("users")}
               className={`block py-2 px-4 rounded ${
-                activeTab === "users" ? "bg-blue-100" : ""
+                activeTab === "users" ? "bg-red-500 text-white " : ""
               }`}
             >
               Users

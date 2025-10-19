@@ -94,7 +94,7 @@ const ProductManagement = () => {
   }
 
   return (
-    <div>
+    <div className="text-white">
       <h2 className="text-2xl font-bold mb-4">Manage Products</h2>
       <button
         className="btn btn-primary mb-4"

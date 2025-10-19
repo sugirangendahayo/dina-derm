@@ -46,7 +46,7 @@ const OrderManagement = () => {
   }
 
   return (
-    <div>
+    <div className="text-white">
       <h2 className="text-2xl font-bold mb-4">Manage Orders</h2>
       <div className="overflow-x-auto">
         <table className="table table-zebra">
