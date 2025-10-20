@@ -16,7 +16,7 @@ function TypewriterText({
   });
 
   return (
-    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
+    <h1 className="text-4xl text-[1rem] font-bold text-white">
       {text}
       <Cursor cursorStyle="|" />
     </h1>

@@ -1,18 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import DottedGlowBackgroundDemoSecond from "@/components/DottedGlowBackgroundDemoSecond";
+import initializeAOS from "@/components/utils/aosConfig";
+import Melanin from "@/assets/beauty-girl.png";
 
 const Home = () => {
+  useEffect(() => {
+    initializeAOS();
+  }, []);
+
   return (
     <>
       <section className="pt-24 bg-black min-h-screen flex items-center justify-center">
         <DottedGlowBackgroundDemoSecond />
       </section>
-      <section className="h-screen bg-gray-100 flex items-start  justify-center">
+      <section className="h-screen bg-zinc-900 flex flex-col">
         <div className="flex flex-row items-center justify-center gap-4 mt-12">
-          <div className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400">
+          <div
+            className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400"
+            data-aos="fade-down"
+          >
             <span>
               <svg
-                className="w-16 h-16 text-red-500"
+                className="w-16 h-16 text-white"
                 data-slot="icon"
                 fill="none"
                 stroke-width="1.5"
@@ -28,12 +37,17 @@ const Home = () => {
                 ></path>
               </svg>
             </span>
-            <p className="font-semibold text-gray-700">Quality Products & Best Price</p>
+            <p className="font-semibold text-gray-400">
+              Quality Products & Best Price
+            </p>
           </div>
-          <div className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400">
+          <div
+            className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400"
+            data-aos="fade-up"
+          >
             <span>
               <svg
-                className="w-16 h-16 text-red-500"
+                className="w-16 h-16 text-white"
                 data-slot="icon"
                 fill="none"
                 stroke-width="1.5"
@@ -49,12 +63,17 @@ const Home = () => {
                 ></path>
               </svg>
             </span>
-            <p className="font-semibold text-gray-700">Easy Returns & Customization</p>
+            <p className="font-semibold text-gray-400">
+              Easy Returns & Customization
+            </p>
           </div>
-          <div className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400">
+          <div
+            className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400"
+            data-aos="fade-down"
+          >
             <span>
               <svg
-                className="w-16 h-16 text-red-500"
+                className="w-16 h-16 text-white"
                 data-slot="icon"
                 fill="none"
                 stroke-width="1.5"
@@ -70,12 +89,17 @@ const Home = () => {
                 ></path>
               </svg>
             </span>
-            <p className="font-semibold text-gray-700">Free delivery, Installation & Maintenance</p>
+            <p className="font-semibold text-gray-400">
+              Free delivery, Installation & Maintenance
+            </p>
           </div>
-          <div className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400">
+          <div
+            className="flex flex-col items-center justify-center gap-2  p-3 rounded shadow shadow-gray-400"
+            data-aos="fade-up"
+          >
             <span>
               <svg
-                className="w-16 h-16 text-red-500"
+                className="w-16 h-16 text-white"
                 data-slot="icon"
                 fill="none"
                 stroke-width="1.5"
@@ -91,7 +115,37 @@ const Home = () => {
                 ></path>
               </svg>
             </span>
-            <p className="font-semibold text-gray-700">Our impressive Customer Support</p>
+            <p className="font-semibold text-gray-400">
+              Our impressive Customer Support
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-2 font-semibold text-center p-4 m-8">
+          <h1 className="text-4xl font-bold text-white" data-aos="fade-down">
+            What do <span className="text-red-500">we</span> do?
+          </h1>
+          <p className="text-white text-xl italic" data-aos="fade-up">
+            <span className="text-red-500 text-3xl italic">" </span>
+            We want to keep all skin healthy. That’s why we offer superior
+            products for moisturization and have formulations for specific skin
+            concerns and needs. We aim to rescue dry skin to its best healthy
+            self. Our mission is to create skincare that truly understands every
+            skin type. Whether your skin is dry, oily, or sensitive, we believe
+            everyone deserves products that nourish, protect, and restore
+            balance. We carefully choose ingredients that are
+            dermatologist-approved and safe for daily use, giving your skin the
+            gentle care it deserves. We don’t just treat surface dryness — we
+            focus on deep hydration and lasting protection. Our formulas work to
+            strengthen your skin’s natural barrier, helping it stay smooth,
+            soft, and radiant throughout the day. With consistent use, you’ll
+            feel a visible difference in your skin’s texture and glow.
+            <span className="text-red-500 text-3xl italic"> "</span>
+          </p>
+          {/* Three dots carousel */}
+          <div className="flex items-center justify-center gap-2 mt-10 cursor-pointer">
+            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+            <div className="w-2 h-2 bg-white rounded-full"></div>
           </div>
         </div>
       </section>

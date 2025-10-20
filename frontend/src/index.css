@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "daisyui";
+.bg-dotted {
+  background-image: radial-gradient(#0ea5e9 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: moveDots 10s linear infinite;
+}
+
+@keyframes moveDots {
+  from { background-position: 0 0; }
+  to { background-position: 20px 20px; }
+}
+
 
 @custom-variant dark (&:is(.dark *));
 
