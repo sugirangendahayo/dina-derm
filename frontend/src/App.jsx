@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@context/AuthContext";
 import Navbar from "@components/ui/Navbar";
+import Footer from "@components/ui/Footer";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:5000";
@@ -20,6 +21,7 @@ import Profile from "@pages/Profile";
 import AdminRoute from "@components/AdminRoute";
 import Dashboard from "@pages/auth/components/Dashboard";
 import ProductDetails from "@components/ProductDetails";
+import Cart from "@pages/Cart";
 
 function App() {
   const location = useLocation();
@@ -39,6 +41,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<Dashboard />} />
@@ -49,6 +52,10 @@ function App() {
           </Route>
         </Route>
       </Routes>
+
+      {location.pathname !== "/login" &&
+        location.pathname !== "/signup" &&
+        !location.pathname.startsWith("/admin") && <Footer />}
     </AuthProvider>
   );
 }

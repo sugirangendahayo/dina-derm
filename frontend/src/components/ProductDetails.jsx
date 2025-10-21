@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import useCartStore from "@/pages/store/cartStore"; // Adjust path if needed
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -13,21 +14,20 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const addItem = useCartStore((state) => state.addItem);
+
   // Helper function to ensure proper image URLs
   const getImageUrl = (imagePath) => {
     if (!imagePath) return "";
 
-    // If it's already a full URL, return as is
     if (imagePath.startsWith("http")) {
       return imagePath;
     }
 
-    // If it starts with /uploads, prepend the backend URL
     if (imagePath.startsWith("/uploads")) {
       return `http://localhost:5000${imagePath}`;
     }
 
-    // If it's just a filename, assume it's in uploads
     return `http://localhost:5000/uploads/${imagePath}`;
   };
 
@@ -78,6 +78,11 @@ const ProductDetails = () => {
     setAllImages(images);
     setSelectedImage(images[0] || "");
   }, [selectedVariant, product]);
+
+  const handleAddToCart = () => {
+    addItem(product, selectedVariant);
+    toast.success(`${product.name} added to cart!`);
+  };
 
   if (loading) {
     return (
@@ -188,7 +193,10 @@ const ProductDetails = () => {
               )}
             </div>
           )}
-          <button className="w-full border-[1px] border-red-500 text-white py-3 rounded hover:bg-red-500 transition-colors flex items-center justify-center gap-2">
+          <button
+            className="w-full border-[1px] border-red-500 text-white py-3 rounded hover:bg-red-500 transition-colors flex items-center justify-center gap-2"
+            onClick={handleAddToCart}
+          >
             Add to Cart
             <lord-icon
               src="src/data/cart-jump.json"

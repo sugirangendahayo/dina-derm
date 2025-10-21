@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import useCartStore from "@/pages/store/cartStore";
 
 const Collection = () => {
   const [categories, setCategories] = useState([]);
@@ -13,6 +14,8 @@ const Collection = () => {
   const [isDesktop, setIsDesktop] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,7 +43,6 @@ const Collection = () => {
         return acc;
       }, {});
       const processedProducts = productsRes.data.products.map((product) => {
-        // Calculate price safely
         const productVariants = productsRes.data.variants.filter(
           (v) => v.product_id === product.id
         );
@@ -55,7 +57,6 @@ const Collection = () => {
           price = parseFloat(product.base_price) || 0;
         }
 
-        // Ensure price is a valid number
         price = isNaN(price) ? 0 : price;
 
         return {
@@ -87,6 +88,12 @@ const Collection = () => {
     selectedCategory === "All"
       ? products
       : products.filter((product) => product.category === selectedCategory);
+
+  const handleAddToCart = (product) => {
+    const variant = product.variants.length > 0 ? product.variants[0] : null;
+    addItem(product, variant);
+    toast.success(`${product.name} added to cart!`);
+  };
 
   if (loading) {
     return (
@@ -208,7 +215,9 @@ const Collection = () => {
                     if (!isDesktop) setIsSidebarOpen(false);
                   }}
                   className={`cursor-pointer py-2 px-4  rounded text-white ${
-                    selectedCategory === cat ? "bg-red-500 font-bold text-white" : ""
+                    selectedCategory === cat
+                      ? "bg-red-500 font-bold text-white"
+                      : ""
                   }`}
                 >
                   {cat}
@@ -227,8 +236,11 @@ const Collection = () => {
         <div className={gridClass}>
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <Link to={`/product/${product.id}`} key={product.id}>
-                <div className="backdrop-blur-md m-2 bg-white/10 border border-white/20  py-2  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div
+                key={product.id}
+                className="backdrop-blur-md m-2 bg-white/10 border border-white/20  py-2  rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+              >
+                <Link to={`/product/${product.id}`}>
                   <img
                     src={`http://localhost:5000${product.default_image}`}
                     alt={product.name}
@@ -243,7 +255,7 @@ const Collection = () => {
                       {product.name}
                     </h3>
                     <p className="text-gray-300 mb-2">
-                      {/* Safe price display with fallback */}$
+                      $
                       {typeof product.price === "number" &&
                       !isNaN(product.price)
                         ? product.price.toFixed(2)
@@ -252,18 +264,21 @@ const Collection = () => {
                     <p className="text-sm text-gray-300 mb-4 line-clamp-2">
                       {product.description}
                     </p>
-                    <button className="w-full border-[1px] border-red-500 text-white py-2 rounded hover:bg-red-500 transition-colors flex items-center justify-center gap-2 cursor-pointer">
-                      Add to Cart
-                      <lord-icon
-                        src="src/data/cart-jump.json"
-                        trigger="loop"
-                        colors="primary:#fff,secondary:#C41E3A "
-                        style={{ width: "24px", height: "24px" }}
-                      />
-                    </button>
                   </div>
-                </div>
-              </Link>
+                </Link>
+                <button
+                  className="w-[90%] mx-auto border-[1px] border-red-500 text-white py-2 rounded hover:bg-red-500 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  Add to Cart
+                  <lord-icon
+                    src="src/data/cart-jump.json"
+                    trigger="loop"
+                    colors="primary:#fff,secondary:#C41E3A "
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                </button>
+              </div>
             ))
           ) : (
             <div className="col-span-full text-center py-8">
