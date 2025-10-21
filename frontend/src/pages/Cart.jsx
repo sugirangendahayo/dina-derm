@@ -1,17 +1,23 @@
+/* eslint-disable no-unused-vars */
 // frontend/src/pages/Cart.js
-import React , {useEffect}from "react";
+import React, { useEffect } from "react";
 import useCartStore from "@/pages/store/cartStore";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+
+// Replace with your Stripe publishable key
+const stripePromise = loadStripe("pk_test_your_publishable_key_here");
 
 const Cart = () => {
   const { items, removeItem, updateQuantity, clearCart, getTotalPrice } =
     useCartStore();
-    useEffect(() => {
-      AOS.init();
-    }, []);
+  useEffect(() => {
+    AOS.init();
+  }, []);
 
   const handleUpdateQuantity = (itemId, delta) => {
     const item = items.find((i) => i.id === itemId);
@@ -22,6 +28,36 @@ const Cart = () => {
       } else {
         removeItem(itemId);
       }
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const stripe = await stripePromise;
+
+      // FIX: Use full URL to your backend
+      const { data: session } = await axios.post(
+        "http://localhost:5000/api/stripe/create-session",
+        {
+          items: items.map((item) => ({
+            variant_id: item.id,
+            quantity: item.quantity,
+            price: item.details.price,
+            name: item.details.name, // Add product name
+          })),
+        }
+      );
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        toast.error(result.error.message);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to initiate checkout");
     }
   };
 
@@ -109,7 +145,7 @@ const Cart = () => {
                   <div className="flex-shrink-0">
                     <div className="w-24 h-24 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center border border-gray-700">
                       <img
-                        src={`http://localhost:5000${item.details.image}`}
+                        src={`http://localhost:5000${item.image}`}
                         alt={item.details.name}
                         className="w-20 h-20 object-cover rounded-lg"
                       />
@@ -248,7 +284,10 @@ const Cart = () => {
                 </div>
               </div>
 
-              <button className="w-full bg-red-500 hover:bg-red-600 text-white py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 mb-4 cursor-pointer">
+              <button
+                onClick={handleCheckout}
+                className="w-full bg-red-500 hover:bg-red-600 text-white py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 mb-4 cursor-pointer"
+              >
                 Proceed to Checkout
                 <svg
                   className="w-5 h-5 ml-2 inline"

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@stripe/stripe-js':
+        specifier: ^8.1.0
+        version: 8.1.0
       '@tailwindcss/vite':
         specifier: ^4.1.14
         version: 4.1.14(vite@7.1.10(jiti@2.6.1)(lightningcss@1.30.1))
@@ -518,6 +521,10 @@ packages:
     resolution: {integrity: sha512-TAcgQh2sSkykPRWLrdyy2AiceMckNf5loITqXxFI5VuQjS5tSuw3WlwdN8qv8vzjLAUTvYaH/mVjSFpbkFbpTg==}
     cpu: [x64]
     os: [win32]
+
+  '@stripe/stripe-js@8.1.0':
+    resolution: {integrity: sha512-bhhi0iSHDFRa2pPVv3WOHC6x/iGEu5AZqIiAvXsT8VOucsEre9gzgsK0jFzbzfGW2eeubF+mCdTTYwNAQCMJKg==}
+    engines: {node: '>=12.16'}
 
   '@tailwindcss/node@4.1.14':
     resolution: {integrity: sha512-hpz+8vFk3Ic2xssIA3e01R6jkmsAhvkQdXlEbRTk6S10xDAtiQiM3FyvZVGsucefq764euO/b8WUW9ysLdThHw==}
@@ -1758,6 +1765,8 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.52.5':
     optional: true
+
+  '@stripe/stripe-js@8.1.0': {}
 
   '@tailwindcss/node@4.1.14':
     dependencies:

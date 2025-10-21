@@ -4,6 +4,8 @@ import { AuthProvider } from "@context/AuthContext";
 import Navbar from "@components/ui/Navbar";
 import Footer from "@components/ui/Footer";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 axios.defaults.baseURL = "http://localhost:5000";
 
@@ -31,6 +33,18 @@ function App() {
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
         !location.pathname.startsWith("/admin") && <Navbar />}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
 
       <Routes>
         <Route path="/" element={<Home />} />

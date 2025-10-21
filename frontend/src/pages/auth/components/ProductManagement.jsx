@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
-// tbody
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -48,9 +47,6 @@ const ProductManagement = () => {
         axios.get("/api/products"),
         axios.get("/api/products/categories"),
       ]);
-      console.log(productsRes.data);
-      // console.log(categoriesRes.data);
-      
       setProducts(productsRes.data.products);
       setVariants(productsRes.data.variants);
       setCategories(categoriesRes.data);
@@ -129,7 +125,7 @@ const ProductManagement = () => {
       await axios.post("/api/products", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("Product created");
+      toast.success("Product created successfully!");
       setShowCreateModal(false);
       resetProductForm();
       fetchData();
@@ -156,7 +152,7 @@ const ProductManagement = () => {
       await axios.put(`/api/products/${currentProduct.id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("Product updated");
+      toast.success("Product updated successfully!");
       setShowEditModal(false);
       resetProductForm();
       fetchData();
@@ -181,17 +177,19 @@ const ProductManagement = () => {
       base_price: product.base_price,
     });
     setExistingDefault(product.default_image);
-    setKeptAdditional(product.additional_images || []);
+    setKeptAdditional(
+      Array.isArray(product.additional_images) ? product.additional_images : []
+    );
     setDefaultFile(null);
     setAdditionalFiles([]);
     setShowEditModal(true);
   };
 
   const handleDeleteProduct = async (id) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         await axios.delete(`/api/products/${id}`);
-        toast.success("Product deleted");
+        toast.success("Product deleted successfully!");
         fetchData();
       } catch (err) {
         toast.error("Failed to delete product");
@@ -220,7 +218,7 @@ const ProductManagement = () => {
       await axios.post("/api/variants", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("Variant created");
+      toast.success("Variant created successfully!");
       setShowCreateVariantModal(false);
       resetVariantForm();
       fetchData();
@@ -242,7 +240,7 @@ const ProductManagement = () => {
       await axios.put(`/api/variants/${currentVariant._id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("Variant updated");
+      toast.success("Variant updated successfully!");
       setShowEditVariantModal(false);
       resetVariantForm();
       fetchData();
@@ -270,16 +268,16 @@ const ProductManagement = () => {
       stock: variant.stock,
       attributes: variant.attributes,
     });
-    setKeptVariantImages(variant.images || []);
+    setKeptVariantImages(Array.isArray(variant.images) ? variant.images : []);
     setVariantFiles([]);
     setShowEditVariantModal(true);
   };
 
   const handleDeleteVariant = async (id) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm("Are you sure you want to delete this variant?")) {
       try {
         await axios.delete(`/api/variants/${id}`);
-        toast.success("Variant deleted");
+        toast.success("Variant deleted successfully!");
         fetchData();
       } catch (err) {
         toast.error("Failed to delete variant");
@@ -289,558 +287,760 @@ const ProductManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="loading loading-spinner loading-lg"></div>
+      <div className="min-h-screen bg-black pt-24 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-white text-lg">Loading products...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="text-white">
-      <h2 className="text-2xl font-bold mb-4">Manage Products</h2>
-      <button
-        className="p-2 text-white rounded cursor-pointer bg-red-500 "
-        onClick={() => {
-          resetProductForm();
-          setShowCreateModal(true);
-        }}
-      >
-        Add Product
-      </button>
-      <select
-        className="select select-bordered mb-4 backdrop-blur-md m-2 bg-white/10 border border-white/20 shadow-lg rounded-lg py-2 z-40 overflow-y-auto transition-all duration-300 ease-in-out"
-        value={selectedCategory}
-        onChange={(e) => setSelectedCategory(e.target.value)}
-      >
-        <option value="all">All Categories</option>
-        {categories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
-            {cat.name}
-          </option>
-        ))}
-      </select>
-      <div className="overflow-x-auto">
-        <table className="table table-zebra">
-          <thead>
-            <tr className="text-white">
-              <th>ID</th>
-              <th>Name</th>
-              <th>Category ID</th>
-              <th>Base Price</th>
-              <th>Default Image</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.map((product) => (
-              <tr key={product.id} >
-                <td>{product.id}</td>
-                <td>{product.name}</td>
-                <td>{product.category_id}</td>
-                <td>${product.base_price}</td>
-                <td>
-                  {product.default_image && (
-                    <img
-                      src={`http://localhost:5000${product.default_image}`}
-                      alt="default"
-                      className="w-10 h-10 object-cover"
-                    />
-                  )}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-info mr-2"
-                    onClick={() => handleEditProduct(product)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-sm btn-error mr-2"
-                    onClick={() => handleDeleteProduct(product.id)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="btn btn-sm btn-secondary"
-                    onClick={() => openVariantsModal(product)}
-                  >
-                    Manage Variants
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <dialog open={showCreateModal} className="modal">
-        <div className="modal-box backdrop-blur-md bg-white/10 border border-white/20 shadow-lg rounded-lg">
-          <h3 className="font-bold text-lg">Create Product</h3>
-          <div className="py-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="input input-bordered w-full mb-2 text-black"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
+    <div className="min-h-screen bg-black pt-24 p-6 text-white">
+      {/* Header Section */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-2">
+              Product <span className="text-red-500">Management</span>
+            </h1>
+            <p className="text-gray-400">
+              Manage your skincare products and variants
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4">
             <select
-              name="category_id"
-              className="select select-bordered w-full mb-2 text-black"
-              value={formData.category_id}
-              onChange={handleInputChange}
+              className="px-4 py-3 bg-gradient-to-br from-gray-900 to-black border border-gray-700 rounded-xl text-red-500 focus:outline-none focus:border-red-500 transition-colors"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
             >
-              <option value="">Select Category</option>
+              <option value="all" className="text-black">All Categories</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
                 </option>
               ))}
             </select>
-            <input
-              type="number"
-              name="base_price"
-              placeholder="Base Price"
-              className="input input-bordered w-full mb-2 text-black"
-              value={formData.base_price}
-              onChange={handleInputChange}
-            />
-            <div className="mb-4">
-              <p>Default Image (single)</p>
-              <DefaultDropzone onDrop={onDropDefault} />
-              {defaultFile && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">Selected Default Image:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
-                    <div className="relative flex-shrink-0">
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+              onClick={() => {
+                resetProductForm();
+                setShowCreateModal(true);
+              }}
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Add Product
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Products Table */}
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-gray-800 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-800">
+                  <th className="px-6 py-4 text-left text-white font-semibold">
+                    Product
+                  </th>
+                  <th className="px-6 py-4 text-left text-white font-semibold">
+                    Category
+                  </th>
+                  <th className="px-6 py-4 text-left text-white font-semibold">
+                    Price
+                  </th>
+                  <th className="px-6 py-4 text-left text-white font-semibold">
+                    Image
+                  </th>
+                  <th className="px-6 py-4 text-left text-white font-semibold">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product) => (
+                  <tr
+                    key={product.id}
+                    className="border-b border-gray-800 hover:bg-gray-800/20 transition-colors"
+                  >
+                    <td className="px-6 py-4">
+                      <div className="text-white font-medium">
+                        {product.name}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-gray-300">
+                      {product.category_id}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-red-500 font-bold">
+                        ${product.base_price}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      {product.default_image && (
+                        <img
+                          src={`http://localhost:5000${product.default_image}`}
+                          alt="default"
+                          className="w-12 h-12 object-cover rounded-lg border border-gray-700"
+                        />
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-colors border border-blue-500/30 flex items-center gap-2"
+                          onClick={() => handleEditProduct(product)}
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                            />
+                          </svg>
+                          Edit
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors border border-red-500/30 flex items-center gap-2"
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                          Delete
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg transition-colors border border-purple-500/30 flex items-center gap-2"
+                          onClick={() => openVariantsModal(product)}
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 6h16M4 12h16M4 18h16"
+                            />
+                          </svg>
+                          Variants
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Create Product Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-800">
+              <h3 className="text-2xl font-bold text-white">
+                Create New Product
+              </h3>
+              <p className="text-gray-400 mt-1">
+                Add a new product to your collection
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Product Name"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
+              <select
+                name="category_id"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-red-500 transition-colors"
+                value={formData.category_id}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                name="base_price"
+                placeholder="Base Price"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={formData.base_price}
+                onChange={handleInputChange}
+              />
+
+              <div>
+                <label className="block text-white mb-2">Default Image</label>
+                <DefaultDropzone onDrop={onDropDefault} />
+                {defaultFile && (
+                  <div className="mt-3">
+                    <div className="relative inline-block">
                       <img
                         src={URL.createObjectURL(defaultFile)}
                         alt="default preview"
-                        className="w-20 h-20 object-cover rounded"
+                        className="w-24 h-24 object-cover rounded-lg border border-gray-700"
                       />
                       <button
-                        onClick={() => removeDefault()}
-                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                        onClick={removeDefault}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
                       >
                         ×
                       </button>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-            <div>
-              <p>Additional Images (multiple)</p>
-              <AdditionalDropzone onDrop={onDropAdditional} />
-              {additionalFiles.length > 0 && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">Selected Additional Images:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
+                )}
+              </div>
+
+              <div>
+                <label className="block text-white mb-2">
+                  Additional Images
+                </label>
+                <AdditionalDropzone onDrop={onDropAdditional} />
+                {additionalFiles.length > 0 && (
+                  <div className="mt-3 flex gap-3 overflow-x-auto py-2">
                     {additionalFiles.map((file, index) => (
                       <div key={index} className="relative flex-shrink-0">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={`additional ${index}`}
-                          className="w-20 h-20 object-cover rounded"
+                          className="w-20 h-20 object-cover rounded-lg border border-gray-700"
                         />
                         <button
                           onClick={() => removeAdditional(index)}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
                         >
                           ×
                         </button>
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-800 flex gap-3">
+              <button
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={handleCreateProduct}
+              >
+                Create Product
+              </button>
+              <button
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={() => setShowCreateModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-          <div className="modal-action">
-            <button className="btn btn-primary" onClick={handleCreateProduct}>
-              Create
-            </button>
-            <button className="btn" onClick={() => setShowCreateModal(false)}>
-              Cancel
-            </button>
-          </div>
         </div>
-      </dialog>
+      )}
 
-      <dialog open={showEditModal} className="modal">
-        <div className="modal-box backdrop-blur-md bg-white/10 border border-white/20 shadow-lg rounded-lg">
-          <h3 className="font-bold text-lg">Edit Product</h3>
-          <div className="py-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="input input-bordered w-full mb-2 text-black"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-            <select
-              name="category_id"
-              className="select select-bordered w-full mb-2 text-black"
-              value={formData.category_id}
-              onChange={handleInputChange}
-            >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-            <input
-              type="number"
-              name="base_price"
-              placeholder="Base Price"
-              className="input input-bordered w-full mb-2 text-black"
-              value={formData.base_price}
-              onChange={handleInputChange}
-            />
-            <div className="mb-4">
-              <p>Default Image</p>
-              {existingDefault && !defaultFile && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">Current Default Image:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
+      {/* Edit Product Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-800">
+              <h3 className="text-2xl font-bold text-white">Edit Product</h3>
+              <p className="text-gray-400 mt-1">Update product details</p>
+            </div>
+            <div className="p-6 space-y-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Product Name"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
+              <select
+                name="category_id"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-red-500 transition-colors"
+                value={formData.category_id}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="number"
+                name="base_price"
+                placeholder="Base Price"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={formData.base_price}
+                onChange={handleInputChange}
+              />
+
+              <div>
+                <label className="block text-white mb-2">Default Image</label>
+                {existingDefault && !defaultFile && (
+                  <div className="mb-3">
+                    <p className="text-gray-400 text-sm mb-2">Current Image:</p>
                     <img
                       src={existingDefault}
                       alt="current default"
-                      className="w-20 h-20 object-cover rounded"
+                      className="w-24 h-24 object-cover rounded-lg border border-gray-700"
                     />
                   </div>
-                </div>
-              )}
-              {defaultFile && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">New Default Image:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
-                    <img
-                      src={URL.createObjectURL(defaultFile)}
-                      alt="new default"
-                      className="w-20 h-20 object-cover rounded"
-                    />
+                )}
+                <DefaultDropzone onDrop={onDropDefault} />
+                {defaultFile && (
+                  <div className="mt-3">
+                    <p className="text-gray-400 text-sm mb-2">New Image:</p>
+                    <div className="relative inline-block">
+                      <img
+                        src={URL.createObjectURL(defaultFile)}
+                        alt="new default"
+                        className="w-24 h-24 object-cover rounded-lg border border-gray-700"
+                      />
+                      <button
+                        onClick={removeDefault}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
+                      >
+                        ×
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
-              <DefaultDropzone onDrop={onDropDefault} />
+                )}
+              </div>
+
+              <div>
+                <label className="block text-white mb-2">
+                  Additional Images
+                </label>
+                {keptAdditional.length > 0 && (
+                  <div className="mb-3">
+                    <p className="text-gray-400 text-sm mb-2">
+                      Current Images:
+                    </p>
+                    <div className="flex gap-3 overflow-x-auto py-2">
+                      {keptAdditional.map((img, index) => (
+                        <div key={index} className="relative flex-shrink-0">
+                          <img
+                            src={img}
+                            alt={`current ${index}`}
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-700"
+                          />
+                          <button
+                            onClick={() => removeKeptAdditional(img)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <AdditionalDropzone onDrop={onDropAdditional} />
+                {additionalFiles.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-gray-400 text-sm mb-2">New Images:</p>
+                    <div className="flex gap-3 overflow-x-auto py-2">
+                      {additionalFiles.map((file, index) => (
+                        <div key={index} className="relative flex-shrink-0">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`new ${index}`}
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-700"
+                          />
+                          <button
+                            onClick={() => removeAdditional(index)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-            <div>
-              <p>Additional Images</p>
-              {keptAdditional.length > 0 && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">Current Additional Images:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
-                    {keptAdditional.map((img, index) => (
-                      <div key={index} className="relative flex-shrink-0">
-                        <img
-                          src={img}
-                          alt={`current ${index}`}
-                          className="w-20 h-20 object-cover rounded"
-                        />
-                        <button
-                          onClick={() => removeKeptAdditional(img)}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              <AdditionalDropzone onDrop={onDropAdditional} />
-              {additionalFiles.length > 0 && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">New Additional Images:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
-                    {additionalFiles.map((file, index) => (
-                      <div key={index} className="relative flex-shrink-0">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={`new ${index}`}
-                          className="w-20 h-20 object-cover rounded"
-                        />
-                        <button
-                          onClick={() => removeAdditional(index)}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="p-6 border-t border-gray-800 flex gap-3">
+              <button
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={handleUpdateProduct}
+              >
+                Update Product
+              </button>
+              <button
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={() => setShowEditModal(false)}
+              >
+                Cancel
+              </button>
             </div>
-          </div>
-          <div className="modal-action">
-            <button className="btn btn-primary" onClick={handleUpdateProduct}>
-              Update
-            </button>
-            <button className="btn" onClick={() => setShowEditModal(false)}>
-              Cancel
-            </button>
           </div>
         </div>
-      </dialog>
+      )}
 
-      <dialog open={showVariantsModal} className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">
-            Manage Variants for {currentProduct?.name}
-          </h3>
-          <button
-            className="btn btn-primary mb-4"
-            onClick={() => {
-              resetVariantForm();
-              setShowCreateVariantModal(true);
-            }}
-          >
-            Add Variant
-          </button>
-          <table className="table table-zebra">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentProductVariants.map((v) => (
-                <tr key={v._id}>
-                  <td>{v.variant_name}</td>
-                  <td>${v.price}</td>
-                  <td>{v.stock}</td>
-                  <td>
-                    <button
-                      className="btn btn-sm btn-info mr-2"
-                      onClick={() => handleEditVariant(v)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="btn btn-sm btn-error"
-                      onClick={() => handleDeleteVariant(v._id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="modal-action">
-            <button className="btn" onClick={() => setShowVariantsModal(false)}>
-              Close
-            </button>
+      {/* Variants Management Modal */}
+      {showVariantsModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-800">
+              <h3 className="text-2xl font-bold text-white">
+                Manage Variants - {currentProduct?.name}
+              </h3>
+              <p className="text-gray-400 mt-1">
+                Manage product variants and inventory
+              </p>
+            </div>
+            <div className="p-6">
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-2 mb-6"
+                onClick={() => {
+                  resetVariantForm();
+                  setShowCreateVariantModal(true);
+                }}
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                Add Variant
+              </button>
+
+              <div className="bg-gray-800/50 rounded-xl border border-gray-700 overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-700">
+                      <th className="px-6 py-4 text-left text-white font-semibold">
+                        Variant Name
+                      </th>
+                      <th className="px-6 py-4 text-left text-white font-semibold">
+                        Price
+                      </th>
+                      <th className="px-6 py-4 text-left text-white font-semibold">
+                        Stock
+                      </th>
+                      <th className="px-6 py-4 text-left text-white font-semibold">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentProductVariants.map((v) => (
+                      <tr
+                        key={v._id}
+                        className="border-b border-gray-700 last:border-b-0 hover:bg-gray-700/20 transition-colors"
+                      >
+                        <td className="px-6 py-4 text-white">
+                          {v.variant_name}
+                        </td>
+                        <td className="px-6 py-4 text-red-500 font-bold">
+                          ${v.price}
+                        </td>
+                        <td className="px-6 py-4 text-gray-300">{v.stock}</td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-2">
+                            <button
+                              className="px-3 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-colors border border-blue-500/30 text-sm"
+                              onClick={() => handleEditVariant(v)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors border border-red-500/30 text-sm"
+                              onClick={() => handleDeleteVariant(v._id)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-800">
+              <button
+                className="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={() => setShowVariantsModal(false)}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
-      </dialog>
+      )}
 
-      <dialog open={showCreateVariantModal} className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Create Variant</h3>
-          <div className="py-4">
-            <input
-              type="text"
-              name="variant_name"
-              placeholder="Variant Name"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.variant_name}
-              onChange={handleVariantInputChange}
-            />
-            <input
-              type="number"
-              name="price"
-              placeholder="Price"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.price}
-              onChange={handleVariantInputChange}
-            />
-            <input
-              type="number"
-              name="stock"
-              placeholder="Stock"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.stock}
-              onChange={handleVariantInputChange}
-            />
-            <input
-              type="text"
-              name="size"
-              placeholder="Size"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.attributes.size}
-              onChange={handleAttributeChange}
-            />
-            <input
-              type="text"
-              name="scent"
-              placeholder="Scent"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.attributes.scent}
-              onChange={handleAttributeChange}
-            />
-            <div>
-              <p>Images</p>
-              <VariantDropzone onDrop={onDropVariant} />
-              {variantFiles.length > 0 && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">Selected Variant Images:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
+      {/* Create Variant Modal */}
+      {showCreateVariantModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-800">
+              <h3 className="text-2xl font-bold text-white">Create Variant</h3>
+              <p className="text-gray-400 mt-1">
+                Add a new variant to {currentProduct?.name}
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <input
+                type="text"
+                name="variant_name"
+                placeholder="Variant Name"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.variant_name}
+                onChange={handleVariantInputChange}
+              />
+              <input
+                type="number"
+                name="price"
+                placeholder="Price"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.price}
+                onChange={handleVariantInputChange}
+              />
+              <input
+                type="number"
+                name="stock"
+                placeholder="Stock"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.stock}
+                onChange={handleVariantInputChange}
+              />
+              <input
+                type="text"
+                name="size"
+                placeholder="Size"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.attributes.size}
+                onChange={handleAttributeChange}
+              />
+              <input
+                type="text"
+                name="scent"
+                placeholder="Scent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.attributes.scent}
+                onChange={handleAttributeChange}
+              />
+
+              <div>
+                <label className="block text-white mb-2">Variant Images</label>
+                <VariantDropzone onDrop={onDropVariant} />
+                {variantFiles.length > 0 && (
+                  <div className="mt-3 flex gap-3 overflow-x-auto py-2">
                     {variantFiles.map((file, index) => (
                       <div key={index} className="relative flex-shrink-0">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={`variant ${index}`}
-                          className="w-20 h-20 object-cover rounded"
+                          className="w-20 h-20 object-cover rounded-lg border border-gray-700"
                         />
                         <button
                           onClick={() => removeVariantImage(index)}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
                         >
                           ×
                         </button>
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-800 flex gap-3">
+              <button
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={handleCreateVariant}
+              >
+                Create Variant
+              </button>
+              <button
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={() => setShowCreateVariantModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-          <div className="modal-action">
-            <button className="btn btn-primary" onClick={handleCreateVariant}>
-              Create
-            </button>
-            <button
-              className="btn"
-              onClick={() => setShowCreateVariantModal(false)}
-            >
-              Cancel
-            </button>
-          </div>
         </div>
-      </dialog>
+      )}
 
-      <dialog open={showEditVariantModal} className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Edit Variant</h3>
-          <div className="py-4">
-            <input
-              type="text"
-              name="variant_name"
-              placeholder="Variant Name"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.variant_name}
-              onChange={handleVariantInputChange}
-            />
-            <input
-              type="number"
-              name="price"
-              placeholder="Price"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.price}
-              onChange={handleVariantInputChange}
-            />
-            <input
-              type="number"
-              name="stock"
-              placeholder="Stock"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.stock}
-              onChange={handleVariantInputChange}
-            />
-            <input
-              type="text"
-              name="size"
-              placeholder="Size"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.attributes.size}
-              onChange={handleAttributeChange}
-            />
-            <input
-              type="text"
-              name="scent"
-              placeholder="Scent"
-              className="input input-bordered w-full mb-2 text-black"
-              value={variantFormData.attributes.scent}
-              onChange={handleAttributeChange}
-            />
-            <div>
-              {keptVariantImages.length > 0 && (
-                <div className="mb-4">
-                  <p>Existing Images</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
-                    {keptVariantImages.map((img, index) => (
-                      <div key={index} className="relative flex-shrink-0">
-                        <img
-                          src={img}
-                          alt={`existing ${index}`}
-                          className="w-20 h-20 object-cover rounded"
-                        />
-                        <button
-                          onClick={() => removeKeptVariantImage(img)}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
+      {/* Edit Variant Modal */}
+      {showEditVariantModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-800">
+              <h3 className="text-2xl font-bold text-white">Edit Variant</h3>
+              <p className="text-gray-400 mt-1">Update variant details</p>
+            </div>
+            <div className="p-6 space-y-4">
+              <input
+                type="text"
+                name="variant_name"
+                placeholder="Variant Name"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.variant_name}
+                onChange={handleVariantInputChange}
+              />
+              <input
+                type="number"
+                name="price"
+                placeholder="Price"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.price}
+                onChange={handleVariantInputChange}
+              />
+              <input
+                type="number"
+                name="stock"
+                placeholder="Stock"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.stock}
+                onChange={handleVariantInputChange}
+              />
+              <input
+                type="text"
+                name="size"
+                placeholder="Size"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.attributes.size}
+                onChange={handleAttributeChange}
+              />
+              <input
+                type="text"
+                name="scent"
+                placeholder="Scent"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                value={variantFormData.attributes.scent}
+                onChange={handleAttributeChange}
+              />
+
+              <div>
+                <label className="block text-white mb-2">Variant Images</label>
+                {keptVariantImages.length > 0 && (
+                  <div className="mb-3">
+                    <p className="text-gray-400 text-sm mb-2">
+                      Current Images:
+                    </p>
+                    <div className="flex gap-3 overflow-x-auto py-2">
+                      {keptVariantImages.map((img, index) => (
+                        <div key={index} className="relative flex-shrink-0">
+                          <img
+                            src={img}
+                            alt={`existing ${index}`}
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-700"
+                          />
+                          <button
+                            onClick={() => removeKeptVariantImage(img)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              <p>Add New Images</p>
-              <VariantDropzone onDrop={onDropVariant} />
-              {variantFiles.length > 0 && (
-                <div className="mt-2">
-                  <p className="text-sm mb-1">New Variant Images:</p>
-                  <div className="flex gap-2 overflow-x-auto py-2">
-                    {variantFiles.map((file, index) => (
-                      <div key={index} className="relative flex-shrink-0">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={`new ${index}`}
-                          className="w-20 h-20 object-cover rounded"
-                        />
-                        <button
-                          onClick={() => removeVariantImage(index)}
-                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
+                )}
+                <VariantDropzone onDrop={onDropVariant} />
+                {variantFiles.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-gray-400 text-sm mb-2">New Images:</p>
+                    <div className="flex gap-3 overflow-x-auto py-2">
+                      {variantFiles.map((file, index) => (
+                        <div key={index} className="relative flex-shrink-0">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`new ${index}`}
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-700"
+                          />
+                          <button
+                            onClick={() => removeVariantImage(index)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-800 flex gap-3">
+              <button
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={handleUpdateVariant}
+              >
+                Update Variant
+              </button>
+              <button
+                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-colors"
+                onClick={() => setShowEditVariantModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-          <div className="modal-action">
-            <button className="btn btn-primary" onClick={handleUpdateVariant}>
-              Update
-            </button>
-            <button
-              className="btn"
-              onClick={() => setShowEditVariantModal(false)}
-            >
-              Cancel
-            </button>
-          </div>
         </div>
-      </dialog>
+      )}
     </div>
   );
 };
 
+// Beautiful Dropzone Components
 const DefaultDropzone = ({ onDrop, multiple = false, accept = "image/*" }) => {
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple,
     accept,
@@ -848,10 +1048,34 @@ const DefaultDropzone = ({ onDrop, multiple = false, accept = "image/*" }) => {
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-dashed p-4 cursor-pointer"
+      className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all duration-300 ${
+        isDragActive
+          ? "border-red-500 bg-red-500/10"
+          : "border-gray-600 hover:border-red-500 hover:bg-red-500/5"
+      }`}
     >
       <input {...getInputProps()} />
-      <p>Drag 'n' drop or click to select default image</p>
+      <div className="text-center">
+        <svg
+          className="w-12 h-12 text-gray-400 mx-auto mb-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+        <p className="text-gray-300">
+          {isDragActive
+            ? "Drop the image here..."
+            : "Drag 'n' drop or click to select default image"}
+        </p>
+        <p className="text-gray-500 text-sm mt-1">Single image only</p>
+      </div>
     </div>
   );
 };
@@ -861,7 +1085,7 @@ const AdditionalDropzone = ({
   multiple = true,
   accept = "image/*",
 }) => {
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple,
     accept,
@@ -869,16 +1093,40 @@ const AdditionalDropzone = ({
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-dashed p-4 cursor-pointer"
+      className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all duration-300 ${
+        isDragActive
+          ? "border-red-500 bg-red-500/10"
+          : "border-gray-600 hover:border-red-500 hover:bg-red-500/5"
+      }`}
     >
       <input {...getInputProps()} />
-      <p>Drag 'n' drop or click to select additional images</p>
+      <div className="text-center">
+        <svg
+          className="w-12 h-12 text-gray-400 mx-auto mb-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+        <p className="text-gray-300">
+          {isDragActive
+            ? "Drop images here..."
+            : "Drag 'n' drop or click to select additional images"}
+        </p>
+        <p className="text-gray-500 text-sm mt-1">Multiple images allowed</p>
+      </div>
     </div>
   );
 };
 
 const VariantDropzone = ({ onDrop, multiple = true, accept = "image/*" }) => {
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple,
     accept,
@@ -886,10 +1134,34 @@ const VariantDropzone = ({ onDrop, multiple = true, accept = "image/*" }) => {
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-dashed p-4 cursor-pointer"
+      className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all duration-300 ${
+        isDragActive
+          ? "border-red-500 bg-red-500/10"
+          : "border-gray-600 hover:border-red-500 hover:bg-red-500/5"
+      }`}
     >
       <input {...getInputProps()} />
-      <p>Drag 'n' drop or click to select variant images</p>
+      <div className="text-center">
+        <svg
+          className="w-12 h-12 text-gray-400 mx-auto mb-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+        <p className="text-gray-300">
+          {isDragActive
+            ? "Drop images here..."
+            : "Drag 'n' drop or click to select variant images"}
+        </p>
+        <p className="text-gray-500 text-sm mt-1">Multiple images allowed</p>
+      </div>
     </div>
   );
 };
