@@ -4,9 +4,55 @@ import jwt from "jsonwebtoken";
 import { getPool } from "../config/mysql.js";
 const pool = getPool();
 
+// Add this validation function to your backend authController.js
+const validateSignupData = (data) => {
+  const errors = [];
+
+  if (!data.first_name || data.first_name.length < 2) {
+    errors.push("First name must be at least 2 characters");
+  }
+
+  if (!data.last_name || data.last_name.length < 2) {
+    errors.push("Last name must be at least 2 characters");
+  }
+
+  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    errors.push("Valid email is required");
+  }
+
+  if (!data.phone || !/^\+?[\d\s-()]{10,}$/.test(data.phone)) {
+    errors.push("Valid phone number is required");
+  }
+
+  if (!data.password || data.password.length < 8) {
+    errors.push("Password must be at least 8 characters");
+  } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(data.password)) {
+    errors.push("Password must contain uppercase, lowercase, and number");
+  }
+
+  return errors;
+};
+
+// Update your signup function to include validation
 export const signup = async (req, res) => {
   const { first_name, last_name, email, phone, password } = req.body;
+  
+  // Validate input data
+  const validationErrors = validateSignupData(req.body);
+  if (validationErrors.length > 0) {
+    return res.status(400).json({ 
+      error: "Validation failed",
+      details: validationErrors 
+    });
+  }
+
   try {
+    // Check if email already exists
+    const [existingUsers] = await pool.query("SELECT * FROM Users WHERE email = ?", [email]);
+    if (existingUsers.length > 0) {
+      return res.status(409).json({ message: "Email already exists" });
+    }
+
     const [users] = await pool.query("SELECT * FROM Users");
     const role = users.length === 0 ? "admin" : "user";
 
@@ -15,9 +61,10 @@ export const signup = async (req, res) => {
       "INSERT INTO Users (first_name, last_name, email, phone, password, role) VALUES (?, ?, ?, ?, ?, ?)",
       [first_name, last_name, email, phone, hashedPassword, role]
     );
-    res.status(201).json({ message: "User created" });
+    res.status(201).json({ message: "User created successfully" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Signup error:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 

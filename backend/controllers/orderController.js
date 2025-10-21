@@ -1,3 +1,4 @@
+// backend/controllers/orderController.js
 import { getPool } from "../config/mysql.js";
 const pool = getPool();
 
@@ -9,7 +10,7 @@ export const createOrder = async (req, res) => {
 
   try {
     const [orderResult] = await pool.query(
-      "INSERT INTO Orders (user_id, total_amount) VALUES (?, ?)",
+      "INSERT INTO Orders (user_id, total_amount, status) VALUES (?, ?, 'pending')",
       [user_id, total_amount]
     );
     const order_id = orderResult.insertId;
@@ -37,12 +38,21 @@ export const getOrders = async (req, res) => {
       params = [user.id];
     }
     const [orders] = await pool.query(query, params);
-    // Fetch order items if needed
+
+    for (let order of orders) {
+      const [items] = await pool.query(
+        "SELECT oi.*, v.variant_name FROM Order_Items oi LEFT JOIN Variants v ON oi.variant_id = v.id WHERE oi.order_id = ?",
+        [order.id]
+      );
+      order.items = items;
+    }
+
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 export const deleteOrder = async (req, res) => {
   const { id } = req.params;
   try {
