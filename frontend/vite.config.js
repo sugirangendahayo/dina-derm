@@ -2,6 +2,9 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 // Convert import.meta.url to a __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
